@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/matthartenbower/Documents/jpbc-2.0.0/jars/bcprov-jdk16-1.46.jar"/>
+	<classpathentry kind="lib" path="/Users/matthartenbower/Documents/jpbc-2.0.0/jars/jna-3.2.5.jar"/>
+	<classpathentry kind="lib" path="/Users/matthartenbower/Documents/jpbc-2.0.0/jars/jpbc-api-2.0.0.jar"/>
+	<classpathentry kind="lib" path="/Users/matthartenbower/Documents/jpbc-2.0.0/jars/jpbc-benchmark-2.0.0.jar"/>
+	<classpathentry kind="lib" path="/Users/matthartenbower/Documents/jpbc-2.0.0/jars/jpbc-crypto-2.0.0.jar"/>
+	<classpathentry kind="lib" path="/Users/matthartenbower/Documents/jpbc-2.0.0/jars/jpbc-mm-2.0.0.jar"/>
+	<classpathentry kind="lib" path="/Users/matthartenbower/Documents/jpbc-2.0.0/jars/jpbc-pbc-2.0.0.jar"/>
+	<classpathentry kind="lib" path="/Users/matthartenbower/Documents/jpbc-2.0.0/jars/jpbc-plaf-2.0.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
