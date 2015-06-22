@@ -10,38 +10,42 @@ import it.unisa.dia.gas.plaf.jpbc.pairing.a.TypeACurveGenerator;
 
 public class ParamsGen {
 	public Pairing pairing;
-	public static Field zr, g1, gt;
-	public static Element pk_a, sk_a, isk_a, isk_b, pk_b, sk_b, ownersk_a, g, k, g_k, z_k, e, rka_b;
-	public void generate(){
+	public Params params;
+	
+	public Params generate(){
+		params = new Params();
 		//Get the curve parameters
-				PairingParametersGenerator pg = new TypeACurveGenerator(80, 256);
-				PairingParameters curveParams = pg.generate();
-				//PairingParameters curveParams = PairingFactory.getPairingParameters("a_181_603.properties");
-				this.pairing = PairingFactory.getPairing(curveParams);
+		PairingParametersGenerator pg = new TypeACurveGenerator(80, 256);
+		PairingParameters curveParams = pg.generate();
+		//PairingParameters curveParams = PairingFactory.getPairingParameters("a_181_603.properties");
+		this.pairing = PairingFactory.getPairing(curveParams);
+		params.setPairing(this.pairing);
 				
-				//Initialize the parameters for second-level encryption
-				g1 = pairing.getG1();
-			    gt = pairing.getGT();
-			    zr = pairing.getZr();
-			    g = g1.newRandomElement().getImmutable();
-				ElementPowPreProcessing gPre = g.getElementPowPreProcessing();
-			    k= zr.newRandomElement().getImmutable();
-			    g_k = gPre.powZn(k).getImmutable();
-				z_k = pairing.pairing(g, g_k).getImmutable();
+		//Initialize the parameters for second-level encryption
+		params.setg1(pairing.getG1());
+	    params.setgt(pairing.getGT());
+	    params.setzr(pairing.getZr());
+	    params.setg(params.getg1().newRandomElement().getImmutable());
+		params.setgpre(params.getg().getElementPowPreProcessing());
+		params.setk(params.getzr().newRandomElement().getImmutable());
+		params.setg_k(params.getgpre().powZn(params.getk()).getImmutable());
+		params.setz_k(pairing.pairing(params.getg(), params.getg_k()).getImmutable());
 							      
-				//Generate data owner keys
-				sk_a = pairing.getZr().newRandomElement().getImmutable(); //private key
-				pk_a = gPre.powZn(sk_a).getImmutable();
-				isk_a = sk_a.invert().getImmutable(); //invert the secret key to calculate the proxy re-encryption key
+		//Generate data owner keys
+		params.setOwnerSK(pairing.getZr().newRandomElement().getImmutable()); //private key
+		params.setOwnerPK(params.getgpre().powZn(params.getOwnerSK()).getImmutable());
+		params.setOwnerISK(params.getOwnerSK().invert().getImmutable()); //invert the secret key to calculate the proxy re-encryption key
 				
 				
-				//Generate user keys (USER1)
-				sk_b = pairing.getZr().newRandomElement().getImmutable(); //private key
-				pk_b = gPre.powZn(sk_b).getImmutable();
-				isk_b = sk_b.invert().getImmutable();
+		//Generate user keys (USER1)
+		params.setUserSK(pairing.getZr().newRandomElement().getImmutable()); //private key
+		params.setUserPK(params.getgpre().powZn(params.getUserSK()).getImmutable());
+		params.setUserISK(params.getUserSK().invert().getImmutable());
 				
-				//Generate proxy re-encryption keys
-				rka_b = pk_b.powZn(isk_a).getImmutable();
+		//Generate proxy re-encryption keys
+		params.setReEncryptionKey(params.getUserPK().powZn(params.getOwnerISK()).getImmutable());
+		
+		return params;
 	}
 	
 }
