@@ -1,24 +1,43 @@
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
 public class Encryption implements Runnable{
+	File fin, fout;
+	byte[] array;
+	OutputStream os;
 	
+	public Encryption(File fin, File fout){
+		this.fin = fin;
+		this.fout = fout;
+	}
+		
 	public void run(){
 		ByteReaderWriter bytes = new ByteReaderWriter(); //create a new nBytes object
-		File fin = new File("book.txt");
-		long length = fin.length();
-		int blockSize = 25; //modify the block size here
-		long blocks = (long)Math.ceil((double)length/(double)blockSize); //calculates the total number of blocks needed
-		InputStream in = new FileInputStream(fin);
-		for(int i = 0; i < blocks; i++){
-			array = new byte[blockSize];
+		InputStream in = null;
+		try {
+			in = new FileInputStream(fin);
+		} catch (FileNotFoundException e) {}
+		int blockSize = 128;
+		array = new byte[blockSize];
+		try {
 			array = bytes.readFile(blockSize, in);
-			encrypt.run();
-		}
+		} catch (IOException e) {}
+		try {
+			os = new FileOutputStream(fout);
+		} catch (FileNotFoundException e) {}
+		
+		try {
+			bytes.writeFile(array, os);
+		} catch (IOException e) {}
+		
 	}
 	
 }
