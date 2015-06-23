@@ -39,10 +39,10 @@ public class BLPairing_MultiThreaded{
 	public static int x;
 	public static ArrayList<String> decoded;
 	BufferedWriter bw;
-	ThreadedEncryption encrypt = new ThreadedEncryption();
+	Encryption encrypt = new Encryption();
 	
 	public void readFile() throws IOException{
-		nBytes bytes = new nBytes(); //create a new nBytes object
+		ByteReaderWriter bytes = new ByteReaderWriter(); //create a new nBytes object
 		File fin = new File("book.txt");
 		long length = fin.length();
 		int blockSize = 25; //modify the block size here
