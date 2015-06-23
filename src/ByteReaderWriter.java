@@ -27,7 +27,8 @@ public class ByteReaderWriter {
 		this.blockSize = blockSize; //specify the size of the file block (in bytes)
 		this.in = in;
 		array = new byte[blockSize];
-		eof = this.in.read(array, 0, blockSize); //read 8 bytes into the array
+		int eof = 0;
+		this.in.read(array, 0, blockSize);
 		return array;
 	}
 		
