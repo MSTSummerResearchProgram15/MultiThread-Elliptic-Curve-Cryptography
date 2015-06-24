@@ -11,6 +11,10 @@ import java.util.concurrent.Executors;
 public class ThreadManager {
 	public static byte[] array;
 	public static void main(String[] args) throws IOException{
+		//Generate parameters
+		Params params;
+		ParamsGen gen = new ParamsGen();
+		params = gen.generate();
 		//Preprocessing - split file into chunks
 		ByteReaderWriter rw = new ByteReaderWriter();
 		File fin = new File("book.txt");
@@ -30,13 +34,14 @@ public class ThreadManager {
 		}
 		in.close();
 		
-		/*
+		//Encrypt the file chunks
         ExecutorService executor = Executors.newFixedThreadPool(5);
-        for(int i = 0; i < 10; i++){
-        	Runnable worker = new Encryption();
+        for(int i = 0; i < numFiles; i++){
+        	fin = new File("File" + i + ".txt");
+        	Runnable worker = new Encryption(fin, fin, params);
         	executor.execute(worker);
         }
         executor.shutdown();
-        */
+        
 	}
 }
