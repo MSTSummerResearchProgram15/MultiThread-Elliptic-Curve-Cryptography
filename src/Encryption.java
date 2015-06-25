@@ -33,8 +33,9 @@ public class Encryption implements Runnable{
 		byte[] result;
 		try {
 			in = new FileInputStream(fin);
-		} catch (FileNotFoundException e) {}
-		int blockSize = 50;
+		} catch (FileNotFoundException e) {				e.printStackTrace();
+}
+		int blockSize = 25;
 		long blocks = (long)Math.ceil((double)length/(double)blockSize);
 		for(int i = 0; i < blocks; i++){
 			array = new byte[blockSize];
@@ -53,7 +54,6 @@ public class Encryption implements Runnable{
 			result = new byte[c1.getLengthInBytes() + c2.getLengthInBytes()];
 			System.arraycopy(c1.toBytes(), 0, result, 0, c1.getLengthInBytes());
 			System.arraycopy(c2.toBytes(), 0, result, c1.getLengthInBytes(), c2.getLengthInBytes());
-			
 			try {
 				out = new FileOutputStream(fout);
 			} catch (FileNotFoundException e2) {

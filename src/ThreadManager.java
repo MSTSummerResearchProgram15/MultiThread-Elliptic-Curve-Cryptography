@@ -40,8 +40,15 @@ public class ThreadManager {
         	fin = new File("File" + i + ".txt");
         	Runnable worker = new Encryption(fin, fin, params);
         	executor.execute(worker);
-        }
+        }        
+        /*
+        for(int i = 0; i < numFiles; i++){
+        	fin = new File("File" + i + ".txt");
+        	Runnable worker = new Decryption(fin, fin, params);
+        	executor.execute(worker);
+        }*/
         executor.shutdown();
+        
         
 	}
 }
