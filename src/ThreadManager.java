@@ -10,19 +10,20 @@ import java.util.concurrent.Executors;
 
 public class ThreadManager {
 	public static byte[] array;
+	
 	public static void main(String[] args) throws IOException{
 		//Generate parameters
 		Params params;
 		ParamsGen gen = new ParamsGen();
 		params = gen.generate();
+		
 		//Preprocessing - split file into chunks
 		ByteReaderWriter rw = new ByteReaderWriter();
 		File fin = new File("book.txt");
 		long fileLength = fin.length();
-		int fileSize = 128;
-		long numFiles = (long)Math.ceil((double)fileLength/(double)fileSize); //number of files
+		int fileSize = 128; //size of split files
+		long numFiles = (long)Math.ceil((double)fileLength/(double)fileSize); //number of files = length of file/size of each smaller file
 		InputStream in = new FileInputStream(fin);
-		
 		for(int i = 0; i < numFiles; i++){
 			String fileName = "File" + i + ".txt";
 			File fout = new File(fileName);
@@ -37,11 +38,15 @@ public class ThreadManager {
 		//Encrypt the file chunks
         ExecutorService executor = Executors.newFixedThreadPool(5);
         for(int i = 0; i < numFiles; i++){
-        	fin = new File("File" + i + ".txt");
-        	Runnable worker = new Encryption(fin, fin, params);
+			String fileOut = "Encrypted" + i + ".txt";
+			String fileIn = "File" + i + ".txt";
+        	File fout = new File(fileOut);
+        	fin = new File(fileIn);
+        	Runnable worker = new Encryption(fin, fout, params);
         	executor.execute(worker);
-        }        
-        /*
+        }   
+        
+        /* DECRYPT FILE
         for(int i = 0; i < numFiles; i++){
         	fin = new File("File" + i + ".txt");
         	Runnable worker = new Decryption(fin, fin, params);
