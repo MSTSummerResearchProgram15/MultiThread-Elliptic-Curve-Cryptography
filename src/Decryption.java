@@ -1,10 +1,13 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 
 import it.unisa.dia.gas.jpbc.Element;
 
@@ -14,6 +17,7 @@ public class Decryption implements Runnable{
 	Params params;
 	byte[] cipher1, cipher2, result;
 	Element decrypt, c1, c2;
+	BufferedWriter bw;
 	
 	public Decryption(File fin, File fout, Params params){
 		this.fin = fin;
@@ -25,19 +29,18 @@ public class Decryption implements Runnable{
 		ByteReaderWriter bytes = new ByteReaderWriter();
 		InputStream in = null;
 		OutputStream os = null;
-		try {
-			os = new FileOutputStream(fout);
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		long length = fin.length();
+		String temp = null;
+		
+		long length = fin.length(); //get the length of the input file
+		
 		try {
 			in = new FileInputStream(fin);
 		} catch (FileNotFoundException e) {}
-		int ciphertextSize = 64;
+		
+		int ciphertextSize = (int)length/2;
 		cipher1 = new byte[ciphertextSize];
 		cipher2 = new byte[ciphertextSize];
+		
 		try {
 			cipher1 = bytes.readFile(ciphertextSize, in);
 		} catch (IOException e) {}
@@ -49,28 +52,35 @@ public class Decryption implements Runnable{
 		try {
 			in.close();
 		} catch (IOException e) {}
+		
 		c1 = params.getg1().newRandomElement();
 		c2 = params.getg1().newRandomElement();
 
 		c1.setFromBytes(cipher1);
 		c2.setFromBytes(cipher2);
+		
 		//Begin decryption here
 		Element ialpha = params.getReEncryptionKey().powZn(params.getUserISK());
 		decrypt = c2.div(ialpha);
 		result = new byte[decrypt.getLengthInBytes()];
 		result = decrypt.toBytes();
+		
 		try {
-			bytes.writeFile(result, os);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			temp = new String(result, "UTF-8");
+		} catch (UnsupportedEncodingException e1) {e1.printStackTrace();}
+		
+		char[] charArray = temp.toCharArray();
+		
 		try {
-			os.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("Decrypted");
-		}
+			bw = new BufferedWriter(new FileWriter(fout));
+		} catch (IOException e1) {e1.printStackTrace();}
+		
+		try {
+			bytes.writeFile(charArray, bw);
+		} catch (IOException e) {e.printStackTrace();}
+		
+		try {
+			bw.close();
+		} catch (IOException e) {e.printStackTrace();}
 	}
+}

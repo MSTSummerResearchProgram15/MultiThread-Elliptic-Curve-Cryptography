@@ -66,8 +66,7 @@ public class Encryption implements Runnable{
 			plainText.setFromBytes(stringToBytes);
 			c1 = params.getOwnerPK().powZn(params.getk());
 			c2 = params.getz_k().mul(plainText);
-			System.out.println(c1.getLengthInBytes());
-			System.out.println(c2.getLengthInBytes());
+
 			result = new byte[c1.getLengthInBytes() + c2.getLengthInBytes()]; //set the byte array size = size of both ciphertexts
 			System.arraycopy(c1.toBytes(), 0, result, 0, c1.getLengthInBytes());
 			System.arraycopy(c2.toBytes(), 0, result, c1.getLengthInBytes(), c2.getLengthInBytes()); //concatenate both ciphertexts into 1 array
