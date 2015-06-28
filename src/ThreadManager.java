@@ -34,7 +34,7 @@ public class ThreadManager {
 			fout = new File(fileName);
 			BufferedWriter bw = new BufferedWriter(new FileWriter(fout));
 			array = new char[fileSize];
-			array = rw.readFileInChar(fileSize, br);
+			array = rw.readFile(fileSize, br);
 			rw.writeFile(array, bw);	
 			bw.close();
 		}

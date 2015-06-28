@@ -51,7 +51,7 @@ public class Encryption implements Runnable{
 		for(int i = 0; i < blocks; i++){
 			array = new char[blockSize];
 			try {
-				array = bytes.readFileInChar(blockSize, br); //Read the plaintext file into char array
+				array = bytes.readFile(blockSize, br); //Read the plaintext file into char array
 			} catch (IOException e3) {e3.printStackTrace();}
 			
 			//Convert char array to string, and then encode string and convert to byte array

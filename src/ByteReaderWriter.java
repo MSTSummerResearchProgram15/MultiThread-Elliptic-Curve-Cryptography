@@ -26,7 +26,7 @@ public class ByteReaderWriter {
 	int eof;
 	
 	//Read a file n bytes at a time (to handle large files)
-	public char[] readFileInChar(int blockSize, BufferedReader br) throws IOException{
+	public char[] readFile(int blockSize, BufferedReader br) throws IOException{
 		this.blockSize = blockSize; //specify the size of the file block (in bytes)
 		this.br = br;
 		charArray = new char[blockSize];
@@ -34,12 +34,12 @@ public class ByteReaderWriter {
 		return charArray;
 	}
 	
-	public byte[] readFileInBytes(int blockSize, BufferedReader br) throws IOException{
+	public byte[] readFile(int blockSize, InputStream is) throws IOException{
 		this.blockSize = blockSize; //specify the size of the file block (in bytes)
-		this.br = br;
-		byteArray = new char[blockSize];
-		this.br.read(array, 0, blockSize);
-		return array;
+		this.is = is;
+		byteArray = new byte[blockSize];
+		this.is.read(byteArray, 0, blockSize);
+		return byteArray;
 	}
 	
 	public void writeFile(char[] line, BufferedWriter bw) throws IOException{
