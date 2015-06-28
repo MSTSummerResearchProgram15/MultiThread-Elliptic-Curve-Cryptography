@@ -1,6 +1,10 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -9,7 +13,8 @@ import java.util.concurrent.Executors;
 
 
 public class ThreadManager {
-	public static byte[] array;
+	public static char[] array;
+	public static File fin, fout;
 	
 	public static void main(String[] args) throws IOException{
 		//Generate parameters
@@ -19,39 +24,43 @@ public class ThreadManager {
 		
 		//Preprocessing - split file into chunks
 		ByteReaderWriter rw = new ByteReaderWriter();
-		File fin = new File("book.txt");
+		fin = new File("book.txt");
 		long fileLength = fin.length();
 		int fileSize = 128; //size of split files
 		long numFiles = (long)Math.ceil((double)fileLength/(double)fileSize); //number of files = length of file/size of each smaller file
-		InputStream in = new FileInputStream(fin);
+		BufferedReader br = new BufferedReader(new FileReader(fin));
 		for(int i = 0; i < numFiles; i++){
 			String fileName = "File" + i + ".txt";
-			File fout = new File(fileName);
-			OutputStream out = new FileOutputStream(fout);
-			array = new byte[fileSize];
-			array = rw.readFile(fileSize, in);
-			rw.writeFile(array, out);	
-			out.close();
+			fout = new File(fileName);
+			BufferedWriter bw = new BufferedWriter(new FileWriter(fout));
+			array = new char[fileSize];
+			array = rw.readFileInChar(fileSize, br);
+			rw.writeFile(array, bw);	
+			bw.close();
 		}
-		in.close();
+		br.close();
+		
 		
 		//Encrypt the file chunks
         ExecutorService executor = Executors.newFixedThreadPool(5);
         for(int i = 0; i < numFiles; i++){
-			String fileOut = "Encrypted" + i + ".txt";
 			String fileIn = "File" + i + ".txt";
-        	File fout = new File(fileOut);
         	fin = new File(fileIn);
+			String fileOut = "Encrypted" + i + ".txt";
+        	fout = new File(fileOut);
         	Runnable worker = new Encryption(fin, fout, params);
         	executor.execute(worker);
         }   
         
-        /* DECRYPT FILE
+        //Decrypt the file chunks
         for(int i = 0; i < numFiles; i++){
-        	fin = new File("File" + i + ".txt");
-        	Runnable worker = new Decryption(fin, fin, params);
+        	String fileIn = "Encrypted" + i + ".txt";
+        	fin = new File(fileIn);
+      		String fileOut = "Decrypted" + i + ".txt";
+      		fout = new File(fileOut);
+        	Runnable worker = new Decryption(fin, fout, params);
         	executor.execute(worker);
-        }*/
+        }
         executor.shutdown();
         
         
