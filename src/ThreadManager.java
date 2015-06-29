@@ -52,6 +52,7 @@ public class ThreadManager {
         	executor.execute(worker);
         }   
         
+        
         //Decrypt the file chunks
         for(int i = 0; i < numFiles; i++){
         	String fileIn = "Encrypted" + i + ".txt";
@@ -63,6 +64,7 @@ public class ThreadManager {
         }
         executor.shutdown();
         
+        //Post processing - merge the file chunks back into one file
         
 	}
 }
