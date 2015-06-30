@@ -46,9 +46,9 @@ public class Encryption implements Runnable{
 			out = new FileOutputStream(fout, true);
 		} catch (FileNotFoundException e2) {e2.printStackTrace();}
 		
-		int blockSize = 128; //How many bytes of file to encrypt at a time
+		int blockSize = 256; //How many bytes of file to encrypt at a time
 		long blocks = (long)Math.ceil((double)length/(double)blockSize); //How many blocks the file will be encrypted in
-		for(int i = 0; i < blocks; i++){
+		//for(int i = 0; i < blocks; i++){
 			array = new char[blockSize];
 			try {
 				array = bytes.readFile(blockSize, br); //Read the plaintext file into char array
@@ -60,7 +60,6 @@ public class Encryption implements Runnable{
 			try {
 				stringToBytes = temp.getBytes("UTF-8");
 			} catch (UnsupportedEncodingException e) {e.printStackTrace();}
-			
 			//encrypt here
 			plainText = params.getgt().newRandomElement();
 			plainText.setFromBytes(stringToBytes);
@@ -73,7 +72,7 @@ public class Encryption implements Runnable{
 			try {
 				bytes.writeFile(result, out); //write the result to output file
 			} catch (IOException e1) {e1.printStackTrace();}
-		}
+		//}
 		
 		try {
 			br.close();
@@ -88,7 +87,4 @@ public class Encryption implements Runnable{
 		} catch (IOException e) {e.printStackTrace();}
 		
 	}
-	
-			
-	
 }
