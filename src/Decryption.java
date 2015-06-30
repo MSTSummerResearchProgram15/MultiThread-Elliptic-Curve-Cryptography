@@ -32,7 +32,6 @@ public class Decryption implements Runnable{
 		String temp = null;
 		
 		long length = fin.length(); //get the length of the input file
-		System.out.println("The length of the encrypted file before decryption is: " + length);
 		int blockSize = (int)length; //length of blocks in bytes
 		long blocks = (long)Math.ceil((double)length/(double)blockSize); //How many blocks the file will be encrypted in
 		try {
@@ -43,8 +42,7 @@ public class Decryption implements Runnable{
 		} catch (IOException e1) {e1.printStackTrace();}
 		
 		//for(int i = 0; i < blocks; i++){
-			int ciphertextSize = blockSize/2;
-			System.out.println("The ciper text size is " + ciphertextSize);
+			int ciphertextSize = params.getOwnerPK().getLengthInBytes();
 			cipher1 = new byte[ciphertextSize];
 			cipher2 = new byte[ciphertextSize];
 		
