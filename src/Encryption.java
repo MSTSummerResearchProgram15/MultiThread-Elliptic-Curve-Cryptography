@@ -46,7 +46,7 @@ public class Encryption implements Runnable{
 			out = new FileOutputStream(fout, true);
 		} catch (FileNotFoundException e2) {e2.printStackTrace();}
 		
-		int blockSize = 128; //How many bytes of file to encrypt at a time
+		int blockSize = (int)length; //How many bytes of file to encrypt at a time
 		long blocks = (long)Math.ceil((double)length/(double)blockSize); //How many blocks the file will be encrypted in
 		//for(int i = 0; i < blocks; i++){
 			array = new char[blockSize];
