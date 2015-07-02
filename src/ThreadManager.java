@@ -26,7 +26,7 @@ public class ThreadManager {
 		
 		//Preprocessing - split file into chunks
 		ByteReaderWriter rw = new ByteReaderWriter();
-		fin = new File("book.txt");
+		fin = new File("test.txt");
 		long fileLength = fin.length();
 		int fileSize = 128; //size of split files
 		long numFiles = (long)Math.ceil((double)fileLength/(double)fileSize); //number of files = length of file/size of each smaller file
@@ -69,20 +69,15 @@ public class ThreadManager {
 			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 		} catch (InterruptedException e) {e.printStackTrace();}
         
-        //Post processing - merge the file chunks back into one file
-  		String fileOut = "Decrypted_Final.txt";
-  		fout = new File(fileOut);
-  		BufferedWriter writer = new BufferedWriter(new FileWriter(fout, true));
+        
+        //Create an array of all files to merge
+        String[] inputFiles = new String[(int) numFiles];
         for(int i = 0; i < numFiles; i++){
-      		String fileIn = "Decrypted" + i + ".txt";
-      		fin = new File(fileIn);
-      		BufferedReader reader = new BufferedReader(new FileReader(fin));
-      		char[] file = rw.readFile(fileSize, reader);
-      		rw.writeFile(file, writer);
-      		Files.delete(fin.toPath());
-      		reader.close();
+        	inputFiles[i] = "Decrypted" + i + ".txt";
         }
-        writer.close();
+        String outputFile = "Decrypted_Final.txt";
+        FileMerge merge = new FileMerge(inputFiles, outputFile, (int)numFiles);
+        merge.mergeFiles();
         
 	}
 }
