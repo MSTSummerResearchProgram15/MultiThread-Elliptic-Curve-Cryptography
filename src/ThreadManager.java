@@ -23,24 +23,17 @@ public class ThreadManager {
 		Params params;
 		ParamsGen gen = new ParamsGen();
 		params = gen.generate();
-		
+		FileSplitMerge sm = new FileSplitMerge();
 		//Preprocessing - split file into chunks
-		ByteReaderWriter rw = new ByteReaderWriter();
 		fin = new File("test.txt");
 		long fileLength = fin.length();
 		int fileSize = 128; //size of split files
 		long numFiles = (long)Math.ceil((double)fileLength/(double)fileSize); //number of files = length of file/size of each smaller file
-		BufferedReader br = new BufferedReader(new FileReader(fin));
+		String[] splitFileNames = new String[(int)numFiles];
 		for(int i = 0; i < numFiles; i++){
-			String fileName = "File" + i + ".txt";
-			fout = new File(fileName);
-			BufferedWriter bw = new BufferedWriter(new FileWriter(fout));
-			array = new char[fileSize];
-			array = rw.readFile(fileSize, br);
-			rw.writeFile(array, bw);	
-			bw.close();
+			splitFileNames[i] = "File" + i + ".txt";
 		}
-		br.close();
+		sm.splitFile(fin, splitFileNames, fileSize);
 		
 		//Encrypt the file chunks
         ExecutorService executor = Executors.newFixedThreadPool(5);
@@ -76,8 +69,7 @@ public class ThreadManager {
         	inputFiles[i] = "Decrypted" + i + ".txt";
         }
         String outputFile = "Decrypted_Final.txt";
-        FileMerge merge = new FileMerge(inputFiles, outputFile, (int)numFiles);
-        merge.mergeFiles();
+        sm.mergeFiles(inputFiles, outputFile, (int)numFiles);
         
 	}
 }

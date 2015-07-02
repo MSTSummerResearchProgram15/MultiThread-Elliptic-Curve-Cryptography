@@ -33,7 +33,7 @@ public class Encryption implements Runnable{
 		
 	public void run(){
 		Element plainText;
-		ByteReaderWriter bytes = new ByteReaderWriter();
+		FileReaderWriter bytes = new FileReaderWriter();
 		long length = fin.length(); //Length of input file
 		byte[] result, stringToBytes = null;
 		String temp;

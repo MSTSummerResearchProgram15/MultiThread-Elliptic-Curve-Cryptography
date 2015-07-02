@@ -28,7 +28,7 @@ public class Decryption implements Runnable{
 	}
 
 	public void run(){
-		ByteReaderWriter bytes = new ByteReaderWriter();
+		FileReaderWriter bytes = new FileReaderWriter();
 		String temp = null;
 		
 		long length = fin.length(); //get the length of the input file
