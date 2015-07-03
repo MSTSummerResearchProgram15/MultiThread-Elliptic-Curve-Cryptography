@@ -17,16 +17,24 @@ import java.util.concurrent.TimeUnit;
 public class ThreadManager {
 	public static char[] array;
 	public static File fin, fout;
+	public static long numFiles;
 	
 	public static void main(String[] args) throws IOException{
 		//Generate parameters
 		Params params;
 		ParamsGen gen = new ParamsGen();
 		params = gen.generate();
+		User owner = new User();
+		KeyGen key = new KeyGen(params);
+		owner = key.generate(); //generate the keys for the data owner
+		User user1 = new User();
+		user1 = key.generate(); //generate the keys for data user 1
 		
 		//Preprocessing - split file into chunks
-		int chunkSize = 128; //size of split files
+		int chunkSize = 128; //desired size of file chunks, probably will only allow 128, 256, and 512 in future versions
 		String inputFile = "test.txt";
+		File fin = new File(inputFile);
+		numFiles = (long)Math.ceil((double)fin.length()/(double)chunkSize);
 		FileSplitMerge sm = new FileSplitMerge(inputFile, chunkSize);
 		sm.splitFile();
 		
