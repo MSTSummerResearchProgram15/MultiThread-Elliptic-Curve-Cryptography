@@ -87,10 +87,6 @@ public class Params {
 		return this.pairing;
 	}
 	
-	public Element getReEncryptionKey(){
-		return this.rka_b;
-	}
-	
 	public int getFileChunkSize(){
 		return this.chunkSize;
 	}

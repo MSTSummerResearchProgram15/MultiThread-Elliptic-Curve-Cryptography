@@ -31,9 +31,6 @@ public class ParamsGen {
 		params.setk(params.getzr().newRandomElement().getImmutable());
 		params.setg_k(params.getgpre().powZn(params.getk()).getImmutable());
 		params.setz_k(pairing.pairing(params.getg(), params.getg_k()).getImmutable());
-				
-		//Generate proxy re-encryption keys
-		params.setReEncryptionKey(params.getUserPK().powZn(params.getOwnerISK()).getImmutable());
 		
 		return params;
 	}

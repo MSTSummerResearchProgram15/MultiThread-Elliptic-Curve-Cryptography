@@ -5,35 +5,35 @@ import it.unisa.dia.gas.jpbc.Element;
 public class User {
 	private Element pk, sk, isk, rk;
 	
-	public void setUserPK(Element pk){
+	public void setPK(Element pk){
 		this.pk = pk;
 	}
 	
-	public void setUserSK(Element sk){
+	public void setSK(Element sk){
 		this.sk = sk;
 	}
 	
-	public void setUserISK(Element isk){
+	public void setISK(Element isk){
 		this.isk = isk;
 	}
 	
-	public void setUserReEncryptKey(Element rk){
+	public void setReEncryptKey(Element rk){
 		this.rk = rk;
 	}
 	
-	public Element getUserPK(){
+	public Element getPK(){
 		return this.pk;
 	}
 	
-	public Element getUserSK(){
+	public Element getSK(){
 		return this.sk;
 	}
 	
-	public Element getUserISK(){
+	public Element getISK(){
 		return this.isk;
 	}
 	
-	public Element getUserReEncryptKey(){
+	public Element getReEncryptKey(){
 		return this.rk;
 	}
 }

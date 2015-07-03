@@ -20,11 +20,14 @@ public class Decryption implements Runnable{
 	Element decrypt, c1, c2;
 	BufferedWriter bw;
 	InputStream in;
+	User owner, user1;
 	
-	public Decryption(File fin, File fout, Params params){
+	public Decryption(File fin, File fout, Params params, User owner, User user1){
 		this.fin = fin;
 		this.fout = fout;
 		this.params = params;
+		this.owner = owner;
+		this.user1 = user1;
 	}
 
 	public void run(){
@@ -42,7 +45,7 @@ public class Decryption implements Runnable{
 		} catch (IOException e1) {e1.printStackTrace();}
 		
 		//for(int i = 0; i < blocks; i++){
-			int ciphertextSize = params.getOwnerPK().getLengthInBytes();
+			int ciphertextSize = owner.getPK().getLengthInBytes();
 			cipher1 = new byte[ciphertextSize];
 			cipher2 = new byte[ciphertextSize];
 		
@@ -62,7 +65,7 @@ public class Decryption implements Runnable{
 		
 		//Begin decryption here
 		Element reencrypt = params.getPairing().pairing(c1,params.getReEncryptionKey());
-		Element ialpha = reencrypt.powZn(params.getUserISK());
+		Element ialpha = reencrypt.powZn(params.getISK());
 		decrypt = c2.div(ialpha);
 		result = new byte[decrypt.getLengthInBytes()];
 		result = decrypt.toBytes();
