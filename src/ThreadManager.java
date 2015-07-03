@@ -23,17 +23,12 @@ public class ThreadManager {
 		Params params;
 		ParamsGen gen = new ParamsGen();
 		params = gen.generate();
-		FileSplitMerge sm = new FileSplitMerge();
+		
 		//Preprocessing - split file into chunks
-		fin = new File("test.txt");
-		long fileLength = fin.length();
-		int fileSize = 128; //size of split files
-		long numFiles = (long)Math.ceil((double)fileLength/(double)fileSize); //number of files = length of file/size of each smaller file
-		String[] splitFileNames = new String[(int)numFiles];
-		for(int i = 0; i < numFiles; i++){
-			splitFileNames[i] = "File" + i + ".txt";
-		}
-		sm.splitFile(fin, splitFileNames, fileSize);
+		int chunkSize = 128; //size of split files
+		String inputFile = "test.txt";
+		FileSplitMerge sm = new FileSplitMerge(inputFile, chunkSize);
+		sm.splitFile();
 		
 		//Encrypt the file chunks
         ExecutorService executor = Executors.newFixedThreadPool(5);
@@ -57,19 +52,17 @@ public class ThreadManager {
         }
         executor.shutdown();
         
-        //wait for threads to finish before continuing
+        //wait for all threads to finish before continuing
         try {
 			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 		} catch (InterruptedException e) {e.printStackTrace();}
-        
-        
+            
         //Create an array of all files to merge
-        String[] inputFiles = new String[(int) numFiles];
+        String[] inputFiles = new String[(int)numFiles];
         for(int i = 0; i < numFiles; i++){
         	inputFiles[i] = "Decrypted" + i + ".txt";
         }
-        String outputFile = "Decrypted_Final.txt";
-        sm.mergeFiles(inputFiles, outputFile, (int)numFiles);
+        sm.mergeFiles(inputFiles);
         
 	}
 }
