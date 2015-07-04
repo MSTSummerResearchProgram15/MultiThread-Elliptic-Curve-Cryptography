@@ -64,8 +64,8 @@ public class Decryption implements Runnable{
 		c2.setFromBytes(cipher2);
 		
 		//Begin decryption here
-		Element reencrypt = params.getPairing().pairing(c1,params.getReEncryptionKey());
-		Element ialpha = reencrypt.powZn(params.getISK());
+		Element reencrypt = params.getPairing().pairing(c1,user1.getReEncryptKey());
+		Element ialpha = reencrypt.powZn(user1.getISK());
 		decrypt = c2.div(ialpha);
 		result = new byte[decrypt.getLengthInBytes()];
 		result = decrypt.toBytes();

@@ -45,17 +45,18 @@ public class ThreadManager {
         	fin = new File(fileIn);
 			String fileOut = "Encrypted" + i + ".txt";
         	fout = new File(fileOut);
-        	Runnable worker = new Encryption(fin, fout, params);
+        	Runnable worker = new Encryption(fin, fout, params, owner);
         	executor.execute(worker);
         } 
         
         //Decrypt the file chunks
+        key.generateRK(owner, user1); //generate the proxy re-encryption key
         for(int j = 0; j < numFiles; j++){
         	String fileIn = "Encrypted" + j + ".txt";
         	fin = new File(fileIn);
       		String fileOut = "Decrypted" + j + ".txt";
       		fout = new File(fileOut);
-        	Runnable worker = new Decryption(fin, fout, params);
+        	Runnable worker = new Decryption(fin, fout, params, owner, user1);
         	executor.execute(worker);
         }
         executor.shutdown();

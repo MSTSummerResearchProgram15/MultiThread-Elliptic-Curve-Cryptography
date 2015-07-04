@@ -16,7 +16,7 @@ public class KeyGen {
 		return user;
 	}
 	
-	public Element generateRK(User owner, User user1){
-		return user.getUserPK().powZn(owner.getISK()).getImmutable();
+	public void generateRK(User owner, User user1){
+		user1.setReEncryptKey(user1.getPK().powZn(owner.getISK()).getImmutable()); 
 	}
 }
